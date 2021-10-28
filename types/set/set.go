@@ -6,6 +6,7 @@ type Set interface {
 	Put(key string) Set
 	Contains(key string) bool
 	Union(other Set) Set
+	Difference(other Set) Set
 	Length() int
 	Copy() Set
 }
@@ -56,6 +57,20 @@ func (s HashSet) Union(other Set) Set {
 		copiedSet.Put(k)
 	}
 	return copiedSet
+}
+
+func (s HashSet) Difference(other Set) Set {
+	difference := New()
+	union := s.Union(other)
+	intersected := s.Intersect(other)
+
+	for _, k := range union.Keys() {
+		if !intersected.Contains(k) {
+			difference.Put(k)
+		}
+	}
+
+	return difference
 }
 
 func (s HashSet) Length() int {

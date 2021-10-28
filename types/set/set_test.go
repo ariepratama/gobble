@@ -62,6 +62,30 @@ func TestHashSet_Union(t *testing.T) {
 	}
 }
 
+func TestHashSet_Difference(t *testing.T) {
+	set1 := New()
+	set1.Put("a")
+	set1.Put("b")
+	set1.Put("c")
+
+	set2 := New()
+	set2.Put("d")
+	set2.Put("c")
+
+	difference := set1.Difference(set2)
+
+	if difference.Length() != 3 {
+		t.Error("wrong difference length")
+	}
+
+	for _, k := range []string {"a", "b", "d"} {
+		if !difference.Contains(k) {
+			t.Errorf("should have contain %s", k)
+		}
+	}
+
+}
+
 func TestHashSet_Length(t *testing.T) {
 	set := New()
 	set.Put("a")
