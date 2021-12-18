@@ -1,4 +1,4 @@
-package set
+package types
 
 type Set interface {
 	Keys() []string
@@ -15,7 +15,7 @@ type HashSet struct {
 	s map[string]bool
 }
 
-func New() HashSet {
+func NewHashSet() HashSet {
 	return HashSet{
 		make(map[string]bool),
 	}
@@ -42,7 +42,7 @@ func (s HashSet) Contains(key string) bool {
 }
 
 func (s HashSet) Intersect(other Set) Set {
-	var intersectedSet = New()
+	var intersectedSet = NewHashSet()
 	for _, otherKey := range other.Keys() {
 		if s.Contains(otherKey) {
 			intersectedSet.Put(otherKey)
@@ -60,7 +60,7 @@ func (s HashSet) Union(other Set) Set {
 }
 
 func (s HashSet) Difference(other Set) Set {
-	difference := New()
+	difference := NewHashSet()
 	union := s.Union(other)
 	intersected := s.Intersect(other)
 
@@ -78,7 +78,7 @@ func (s HashSet) Length() int {
 }
 
 func (s HashSet) Copy() Set {
-	var newSet = New()
+	var newSet = NewHashSet()
 	for k, v := range s.s {
 		newSet.s[k] = v
 	}
