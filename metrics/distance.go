@@ -5,6 +5,13 @@ import (
 	"math"
 )
 
+type DistanceFn int
+
+const (
+	EUCLIDEAN DistanceFn = iota
+	COSINE
+)
+
 // SetEuclidean calculate SetEuclidean distance between 2 word sets.
 // this function will not take into account word counts
 func SetEuclidean(wordSet1 types.Set, wordSet2 types.Set) float64 {

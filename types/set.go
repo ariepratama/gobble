@@ -15,10 +15,18 @@ type HashSet struct {
 	s map[string]bool
 }
 
-func NewHashSet() HashSet {
+func NewHashSet() Set {
 	return HashSet{
 		make(map[string]bool),
 	}
+}
+
+func NewHashSetFromWords(words []string) Set {
+	newSet := NewHashSet()
+	for _, word := range words {
+		newSet.Put(word)
+	}
+	return newSet
 }
 
 func (s HashSet) Keys() []string {
@@ -79,8 +87,8 @@ func (s HashSet) Length() int {
 
 func (s HashSet) Copy() Set {
 	var newSet = NewHashSet()
-	for k, v := range s.s {
-		newSet.s[k] = v
+	for k, _ := range s.s {
+		newSet.Put(k)
 	}
 	return newSet
 }

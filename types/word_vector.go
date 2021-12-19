@@ -25,6 +25,14 @@ func NewHashWordVector() HashWordVector {
 	}
 }
 
+func NewHashWordVectorFromToken(tokens []string) HashWordVector {
+	wv := NewHashWordVector()
+	for _, token := range tokens {
+		wv.Inc(token)
+	}
+	return wv
+}
+
 func (wv HashWordVector) Words() []string {
 	keys := make([]string, len(wv.wv))
 	i := 0
@@ -55,6 +63,10 @@ func (wv HashWordVector) Put(key string, count int) WordVector {
 }
 
 func (wv HashWordVector) Inc(key string) WordVector {
+	if _, ok := wv.wv[key]; !ok {
+		wv.wv[key] = 0
+	}
+
 	wv.wv[key] = wv.wv[key] + 1
 	return wv
 }
