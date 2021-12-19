@@ -4,6 +4,7 @@ import "math"
 
 type WordVector interface {
 	Words() []string
+	WordSet() Set
 	Frequencies() []int
 	FrequencyOf(key string) int
 	Put(key string, count int) WordVector
@@ -104,4 +105,8 @@ func (wv HashWordVector) Copy() WordVector {
 		newWv.Put(k, v)
 	}
 	return newWv
+}
+
+func (wv HashWordVector) WordSet() Set {
+	return NewHashSetFromWords(wv.Words())
 }

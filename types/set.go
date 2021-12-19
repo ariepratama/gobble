@@ -1,10 +1,10 @@
 package types
 
 type Set interface {
-	Keys() []string
+	Keys() []interface{}
 	Intersect(other Set) Set
-	Put(key string) Set
-	Contains(key string) bool
+	Put(key interface{}) Set
+	Contains(key interface{}) bool
 	Union(other Set) Set
 	Difference(other Set) Set
 	Length() int
@@ -12,12 +12,12 @@ type Set interface {
 }
 
 type HashSet struct {
-	s map[string]bool
+	s map[interface{}]bool
 }
 
 func NewHashSet() Set {
 	return HashSet{
-		make(map[string]bool),
+		make(map[interface{}]bool),
 	}
 }
 
@@ -29,8 +29,8 @@ func NewHashSetFromWords(words []string) Set {
 	return newSet
 }
 
-func (s HashSet) Keys() []string {
-	keys := make([]string, len(s.s))
+func (s HashSet) Keys() []interface{} {
+	keys := make([]interface{}, len(s.s))
 	i := 0
 	for key := range s.s {
 		keys[i] = key
@@ -39,12 +39,12 @@ func (s HashSet) Keys() []string {
 	return keys
 }
 
-func (s HashSet) Put(key string) Set {
+func (s HashSet) Put(key interface{}) Set {
 	s.s[key] = true
 	return s
 }
 
-func (s HashSet) Contains(key string) bool {
+func (s HashSet) Contains(key interface{}) bool {
 	_, ok := s.s[key]
 	return ok
 }

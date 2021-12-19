@@ -8,6 +8,7 @@ import (
 type Document interface {
 	Id() int64
 	Terms() types.Set
+	WordVector() types.WordVector
 }
 
 type SimpleDocument struct {
@@ -29,4 +30,8 @@ func (s SimpleDocument) Id() int64 {
 
 func (s SimpleDocument) Terms() types.Set {
 	return types.NewHashSetFromWords(s.wv.Words())
+}
+
+func (s SimpleDocument) WordVector() types.WordVector {
+	return s.wv
 }

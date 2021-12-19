@@ -18,7 +18,7 @@ func TestHashSet_Keys(t *testing.T) {
 	}
 
 	if len(keys) != expectedKeyLen {
-		t.Errorf("key is more than %d, content=%wv", expectedKeyLen, keys)
+		t.Errorf("key is more than %d, content=%sv", expectedKeyLen, keys)
 	}
 
 }
@@ -36,12 +36,12 @@ func TestHashSet_Intersect(t *testing.T) {
 	intersectedSet := set1.Intersect(set2)
 
 	if intersectedSet.Contains("a") {
-		t.Errorf("%wv should not in intersectedSet", "a")
+		t.Errorf("%s should not in intersectedSet", "a")
 	}
 
 	for _, val := range []string{"b", "c"} {
 		if !intersectedSet.Contains(val) {
-			t.Errorf("%wv should be in intersectedSet", val)
+			t.Errorf("%s should be in intersectedSet", val)
 		}
 	}
 }
@@ -80,7 +80,7 @@ func TestHashSet_Difference(t *testing.T) {
 
 	for _, k := range []string{"a", "b", "d"} {
 		if !difference.Contains(k) {
-			t.Errorf("should have contain %wv", k)
+			t.Errorf("should have contain %s", k)
 		}
 	}
 

@@ -1,9 +1,12 @@
 package queries
 
-import "goir/core"
+import (
+	"goir/types"
+)
 
 type Query interface {
-	Apply(document core.Document) bool
+	Apply(termToDocId map[string]types.Set, resultTermToDocId *map[string]types.Set) map[string]types.Set
+	GetTerm() string
 }
 
 type MatchingQuery struct {
@@ -16,6 +19,16 @@ func NewMatchingQuery(queryStr string) Query {
 	}
 }
 
-func (m MatchingQuery) Apply(document core.Document) bool {
-	return document.Terms().Contains(m.queryStr)
+func (m MatchingQuery) Apply(termToDocId map[string]types.Set, resultTermToDocId *map[string]types.Set) map[string]types.Set {
+	docIds, ok := termToDocId[m.queryStr]
+
+	if ok {
+		(*resultTermToDocId)[m.queryStr] = docIds
+	}
+
+	return *resultTermToDocId
+}
+
+func (m MatchingQuery) GetTerm() string {
+	return m.queryStr
 }
