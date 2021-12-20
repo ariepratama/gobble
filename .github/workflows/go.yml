@@ -26,3 +26,5 @@ jobs:
     
     - name: Upload to testcov
       run: bash <(curl -s https://codecov.io/bash)
+      env:
+        CODECOV_TOKEN: be5f63d6-f15d-4136-9d95-0f61dcde9734
