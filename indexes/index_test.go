@@ -5,33 +5,11 @@ import (
 	"goir/metrics"
 	"goir/queries"
 	"goir/repositories"
-	"goir/types"
 	"testing"
 )
 
-type RepositoryStub struct{}
-
-func newRepositoryStub() repositories.DocumentRepository {
-	return RepositoryStub{}
-}
-
-func (r RepositoryStub) Put(document core.Document) {
-	panic("implement me")
-}
-func (r RepositoryStub) Contains(docId int64) bool {
-	panic("implement me")
-}
-
-func (r RepositoryStub) Get(docId int64) core.Document {
-	panic("implement me")
-}
-
-func (r RepositoryStub) GetByIds(docIds types.Set) []core.Document {
-	panic("implement me")
-}
-
 func TestInMemoryTermToDocIndex_Add(t *testing.T) {
-	repository := newRepositoryStub()
+	repository := repositories.NewInMemoryDocumentRepository()
 	index := NewInMemoryTermToDocIndex(repository)
 	doc1 := core.NewSimpleDocument(1, "bohemian rhapsody")
 	doc2 := core.NewSimpleDocument(2, "love of my life")
@@ -39,8 +17,8 @@ func TestInMemoryTermToDocIndex_Add(t *testing.T) {
 	index.Add(doc1)
 	index.Add(doc2)
 
-	if index.Length() != 2 {
-		t.Error("Length should be ")
+	if index.DocLength() != 2 {
+		t.Error("TermLength should be 2")
 	}
 }
 

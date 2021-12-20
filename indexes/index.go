@@ -15,7 +15,8 @@ type Index interface {
 	Delete(document core.Document) Index
 	TermToDocId() map[string]types.Set
 	Persist()
-	Length() int
+	TermLength() int
+	DocLength() int
 	SearchTopK(topK int, queries []queries.Query, distFn metrics.DistanceFn) []core.Document
 }
 
@@ -63,8 +64,12 @@ func (index InMemoryTermToDocIndex) Persist() {
 	panic("implement me")
 }
 
-func (index InMemoryTermToDocIndex) Length() int {
+func (index InMemoryTermToDocIndex) TermLength() int {
 	return len(index.termToDocId)
+}
+
+func (index InMemoryTermToDocIndex) DocLength() int {
+	return len(index.docIdToTerm)
 }
 
 func (index InMemoryTermToDocIndex) SearchTopK(topK int, queries []queries.Query, distFn metrics.DistanceFn) []core.Document {
