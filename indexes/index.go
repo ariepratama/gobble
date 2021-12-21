@@ -17,7 +17,7 @@ type Index interface {
 	Persist()
 	TermLength() int
 	DocLength() int
-	SearchTopK(topK int, queries []queries.Query, distFn metrics.DistanceFn) []core.Document
+	SearchTopK(topK int, query queries.Query, distFn metrics.DistanceFn) []core.Document
 }
 
 type InMemoryTermToDocIndex struct {
@@ -72,12 +72,10 @@ func (index InMemoryTermToDocIndex) DocLength() int {
 	return len(index.docIdToTerm)
 }
 
-func (index InMemoryTermToDocIndex) SearchTopK(topK int, queries []queries.Query, distFn metrics.DistanceFn) []core.Document {
+func (index InMemoryTermToDocIndex) SearchTopK(topK int, query queries.Query, distFn metrics.DistanceFn) []core.Document {
 	filteredTermToDocId := make(map[string]types.Set)
-	queryWv := toWordVector(queries)
-	for _, query := range queries {
-		filteredTermToDocId = query.Apply(index.termToDocId, &filteredTermToDocId)
-	}
+	queryWv := toWordVector([]queries.Query{query})
+	filteredTermToDocId = query.Apply(index.termToDocId, &filteredTermToDocId)
 
 	docIdSet := types.NewHashSet()
 	for _, docIds := range filteredTermToDocId {
