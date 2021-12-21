@@ -78,3 +78,57 @@ func TestInMemoryTermToDocIndex_And(t *testing.T) {
 		t.Error("results should be 2")
 	}
 }
+
+func TestInMemoryTermToDocIndex_Or(t *testing.T) {
+	repository := repositories.NewInMemoryDocumentRepository()
+	index := NewInMemoryTermToDocIndex(repository)
+	doc1 := core.NewSimpleDocument(1, "bohemian rhapsody")
+	doc2 := core.NewSimpleDocument(2, "love of my life")
+	doc3 := core.NewSimpleDocument(3, "love of bohemian")
+
+	index.Add(doc1)
+	index.Add(doc2)
+	index.Add(doc3)
+
+	q := queries.Or(
+		queries.MatchWith("bohemian"),
+		queries.MatchWith("love"))
+	result := index.SearchTopK(10, q, metrics.COSINE)
+
+	if len(result) != 3 {
+		t.Error("results should be 3")
+	}
+
+	q = queries.Or(
+		queries.MatchWith("of"),
+		queries.MatchWith("life"))
+	result = index.SearchTopK(10, q, metrics.COSINE)
+
+	if len(result) != 2 {
+		t.Error("results should be 2")
+	}
+}
+
+func TestInMemoryTermToDocIndex_Complex(t *testing.T) {
+	repository := repositories.NewInMemoryDocumentRepository()
+	index := NewInMemoryTermToDocIndex(repository)
+
+	index.Add(core.NewSimpleDocument(1, "bohemian rhapsody"))
+	index.Add(core.NewSimpleDocument(2, "love of my life"))
+	index.Add(core.NewSimpleDocument(3, "love of bohemian"))
+	index.Add(core.NewSimpleDocument(4, "i want to ride my bicycle"))
+
+	q := queries.Or(
+		queries.And(queries.MatchWith("bohemian"), queries.MatchWith("rhapsody")),
+		queries.And(
+			queries.MatchWith("i"),
+			queries.MatchWith("want"),
+			queries.MatchWith("ride"),
+			queries.MatchWith("my"),
+			queries.MatchWith("bicycle")))
+	result := index.SearchTopK(10, q, metrics.COSINE)
+
+	if len(result) != 2 {
+		t.Error("results should be 2")
+	}
+}
